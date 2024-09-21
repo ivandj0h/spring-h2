@@ -1,6 +1,8 @@
 package com.ivandjoh.springh2.controller;
 
+import com.ivandjoh.springh2.dto.ApiMessages;
 import com.ivandjoh.springh2.dto.ApiResponse;
+import com.ivandjoh.springh2.model.User;
 import com.ivandjoh.springh2.service.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class UserController {
@@ -21,14 +22,28 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getUsers(
+    public ResponseEntity<ApiResponse<List<User>>> getUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size) {
-        return userService.getUsers(page, size);
+
+        // Mendapatkan semua data users
+        List<User> users = userService.getAllUsers(page, size);
+
+        // Membuat response dengan message yang sesuai
+        ApiResponse<List<User>> response = ApiResponse.success(users, ApiMessages.RESOURCES_FETCHED);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> getUserById(@PathVariable int id) {
-        return userService.getUserById(id);
+    public ResponseEntity<ApiResponse<User>> getUserById(@PathVariable int id) {
+
+        // Mendapatkan data user berdasarkan ID
+        User user = userService.getUserById(id);
+
+        // Membuat response dengan message yang sesuai
+        ApiResponse<User> response = ApiResponse.success(user, ApiMessages.RESOURCE_FETCHED);
+
+        return ResponseEntity.ok(response);
     }
 }

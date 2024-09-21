@@ -1,28 +1,45 @@
 package com.ivandjoh.springh2.dto;
 
-public record ApiResponse<T>(int status, String message, T data) {
+public class ApiResponse<T> {
 
-    // Factory method for success responses (default to status 200)
-    public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(200, ApiMessages.OPERATION_SUCCESS, data);
+    private int status;
+    private String message;
+    private T data;
+
+    public ApiResponse(int status, String message, T data) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
     }
 
-    // Factory method for custom responses
-    public static <T> ApiResponse<T> of(int status, String message, T data) {
-        return new ApiResponse<>(status, message, data);
+    public int getStatus() {
+        return status;
     }
 
-    // Factory method for 404 Not Found
+    public String getMessage() {
+        return message;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    // Factory method for success responses
+    public static <T> ApiResponse<T> success(T data, String message) {
+        return new ApiResponse<>(200, message, data);
+    }
+
+    // Factory method for not found responses
     public static <T> ApiResponse<T> notFound(String message) {
-        return new ApiResponse<>(404, message != null ? message : ApiMessages.RESOURCE_NOT_FOUND, null);
+        return new ApiResponse<>(404, message, null);
     }
 
-    // Factory method for 500 Internal Server Error
+    // Factory method for internal server error
     public static <T> ApiResponse<T> internalServerError(String message) {
-        return new ApiResponse<>(500, message != null ? message : ApiMessages.INTERNAL_SERVER_ERROR, null);
+        return new ApiResponse<>(500, message, null);
     }
 
-    // Factory method for 204 No Content
+    // Factory method for no content
     public static ApiResponse<Void> noContent() {
         return new ApiResponse<>(204, ApiMessages.NO_CONTENT, null);
     }
