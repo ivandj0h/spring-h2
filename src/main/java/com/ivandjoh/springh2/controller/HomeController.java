@@ -12,6 +12,7 @@ import java.util.*;
 @RequestMapping({ "/", "/api", "/api/v1" })
 public class HomeController {
 
+  // Method untuk root URL
   @GetMapping
   public ResponseEntity<Map<String, Object>> home() {
     Map<String, Object> response = new LinkedHashMap<>();
@@ -22,30 +23,32 @@ public class HomeController {
     return ResponseEntity.ok(response);
   }
 
+  // Method untuk URL /success
   @GetMapping("/success")
   public ResponseEntity<ApiResponse<List<String>>> successResponse() {
     List<String> data = List.of("Item1", "Item2");
     return ResponseEntity.ok(ApiResponse.success(data));
   }
 
-  @GetMapping
-  public String getMyHome() {
+  // Method untuk URL /my-home
+  @GetMapping("/dashboard")
+  public String getDashboard() {
     return "Welcome to My Home...";
   }
 
-  // Example for 404 Not Found
+  // Method untuk URL /not-found
   @GetMapping("/not-found")
   public ResponseEntity<ApiResponse<Void>> notFoundResponse() {
     return ResponseEntity.status(404).body(ApiResponse.notFound("This resource was not found"));
   }
 
-  // Example for 500 Internal Server Error
+  // Method untuk URL /server-error
   @GetMapping("/server-error")
   public ResponseEntity<ApiResponse<Void>> serverErrorResponse() {
     return ResponseEntity.status(500).body(ApiResponse.internalServerError("Something went wrong"));
   }
 
-  // Example for 204 No Content
+  // Method untuk URL /no-content
   @GetMapping("/no-content")
   public ResponseEntity<ApiResponse<Void>> noContentResponse() {
     return ResponseEntity.status(204).body(ApiResponse.noContent());
