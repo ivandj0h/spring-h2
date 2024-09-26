@@ -12,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,8 +23,9 @@ public class UserServiceImpl implements UserService {
     private final RestTemplate restTemplate;
     private final String jsonPlaceholderUrl;
 
-    public UserServiceImpl(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository,
-                           RestTemplate restTemplate, @Value("${jsonplaceholder.url}") String jsonPlaceholderUrl) {
+    public UserServiceImpl(UserRepository userRepository, PostRepository postRepository,
+            CommentRepository commentRepository,
+            RestTemplate restTemplate, @Value("${jsonplaceholder.url}") String jsonPlaceholderUrl) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
@@ -48,7 +47,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById((long) id).orElseGet(() -> fetchAndSaveUserById(id));
     }
 
-
     private void fetchAndSaveUsers() {
         User[] users = restTemplate.getForObject(jsonPlaceholderUrl + "/users", User[].class);
         if (users != null) {
@@ -67,6 +65,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @SuppressWarnings("unused")
     private void fetchAndSavePostsByUserId(Long userId) {
         String url = jsonPlaceholderUrl + "/posts?userId=" + userId;
         Post[] posts = restTemplate.getForObject(url, Post[].class);
@@ -77,6 +76,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @SuppressWarnings("unused")
     private void fetchAndSaveCommentsByPostId(Long postId) {
         String url = jsonPlaceholderUrl + "/comments?postId=" + postId;
         Comment[] comments = restTemplate.getForObject(url, Comment[].class);
